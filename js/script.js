@@ -69,27 +69,35 @@ function getData() {
   $.ajax({
     url: weatherQueryURL + city + "&appid=" + APIkey + "&units=metric",
     method: "GET"
-  }).then(function(response) {
-    let recentCity = {};
-    recentCity.city = response.name;
-    recentCity.country = response.sys.country;
-    addHistory(recentCity);
-    let coords = response.coord;
-    let icon = response.weather[0].icon;
-    let currentDateTime = moment()
-      .utc()
-      .add(response.timezone, "s")
-      .format("ddd, MMM Do HH:mm");
-    $("#city").text(response.name + ", " + response.sys.country);
-    $("#icon").attr("src", "http://openweathermap.org/img/wn/" + icon + ".png");
-    $("#local").text(" " + currentDateTime);
-    $("#temperature").text(
-      "Temperature: " + response.main.temp.toFixed(0) + " ℃"
-    );
-    $("#humidity").text("Humidity: " + response.main.humidity + " %");
-    $("#wind").text("Wind Speed: " + response.wind.speed + " m/sec");
-    getUVI(coords);
-  });
+  })
+    .then(function(response) {
+      let recentCity = {};
+      recentCity.city = response.name;
+      recentCity.country = response.sys.country;
+      addHistory(recentCity);
+      let coords = response.coord;
+      let icon = response.weather[0].icon;
+      let currentDateTime = moment()
+        .utc()
+        .add(response.timezone, "s")
+        .format("ddd, MMM Do HH:mm");
+      $("#city").text(response.name + ", " + response.sys.country);
+      $("#icon").attr(
+        "src",
+        "http://openweathermap.org/img/wn/" + icon + ".png"
+      );
+      $("#local").text(" " + currentDateTime);
+      $("#temperature").text(
+        "Temperature: " + response.main.temp.toFixed(0) + " ℃"
+      );
+      $("#humidity").text("Humidity: " + response.main.humidity + " %");
+      $("#wind").text("Wind Speed: " + response.wind.speed + " m/sec");
+      getUVI(coords);
+    })
+    .catch(function(error) {
+      alert(error.responseJSON.message);
+      location.reload();
+    });
 
   $.ajax({
     url: forecastQueryURL + city + "&appid=" + APIkey + "&units=metric",
