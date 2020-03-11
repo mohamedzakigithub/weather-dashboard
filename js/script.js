@@ -1,12 +1,20 @@
+// API endpoint URLs declaration
 let weatherQueryURL = "https://api.openweathermap.org/data/2.5/weather?q=";
 let forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=";
-let uviQueryURL = "http://api.openweathermap.org/data/2.5/uvi?";
+let uviQueryURL = "https://api.openweathermap.org/data/2.5/uvi?";
+// API hey declaration
 let APIkey = "80fd36611a557ef9b88673bb16c8af2c";
+// load local storage object for recent searched cities
 let recentCities = JSON.parse(localStorage.getItem("recentCities")) || [];
 
+// Add event listener for search button
 $("#searchBtn").on("click", getData);
+
+// Call the updateRecent function on page load
 updateRecent();
 
+// The updateRecent function adds buttons for recent cities, assign data-city variable for each button and
+// add event listener to the buttons after creation.
 function updateRecent() {
   $("#recent").empty();
   recentCities.forEach(function(item) {
@@ -23,6 +31,7 @@ function updateRecent() {
   });
 }
 
+// The addHistory function adds recent city to the local storage after taking into account maximum history array of 5 entries
 function addHistory(recentCity) {
   if (recentCities.length < 5) {
     recentCities.unshift(recentCity);
@@ -34,6 +43,8 @@ function addHistory(recentCity) {
   updateRecent();
 }
 
+// The getData function creates tow ajax calls to the weather API and the forecast API then updates the elements on the page
+// with the retrieved data.
 function getData() {
   let city = $("#cityInput").val();
   $.ajax({
@@ -120,6 +131,8 @@ function getData() {
   });
 }
 
+// the getUVI function creates an ajax call to the UV index endpoint and retrieves the UV index, update the element and sets the
+// background color according to the value to reflect the severity level.
 function getUVI(coords) {
   let lat = coords.lat;
   let lon = coords.lon;
