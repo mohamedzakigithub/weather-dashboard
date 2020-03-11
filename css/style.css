@@ -1,0 +1,12 @@
+.forecast {
+  width: 10rem;
+  height: 15rem;
+}
+
+.col {
+  margin-bottom: 1rem;
+}
+
+#city {
+  color: white;
+}
