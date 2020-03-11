@@ -4,38 +4,8 @@ let uviQueryURL = "http://api.openweathermap.org/data/2.5/uvi?";
 let APIkey = "80fd36611a557ef9b88673bb16c8af2c";
 let recentCities = JSON.parse(localStorage.getItem("recentCities")) || [];
 
+$("#searchBtn").on("click", getData);
 updateRecent();
-
-function getUVI(coords) {
-  let lat = coords.lat;
-  let lon = coords.lon;
-  $.ajax({
-    url: uviQueryURL + "appid=" + APIkey + "&lat=" + lat + "&lon=" + lon,
-    method: "GET"
-  }).then(function(response) {
-    let uvi = response.value;
-    let color = "";
-    switch (true) {
-      case uvi <= 3:
-        color = "green";
-        break;
-      case uvi > 3 && uvi <= 6:
-        color = "yellow";
-        break;
-      case uvi > 6 && uvi <= 8:
-        color = " orange";
-        break;
-      case uvi > 8 && uvi <= 11:
-        color = "red";
-        break;
-      case uvi > 11:
-        color = "violet";
-        break;
-    }
-    $("#uvi").text(" " + uvi);
-    $("#uvi").css("background-color", color);
-  });
-}
 
 function updateRecent() {
   $("#recent").empty();
@@ -98,7 +68,6 @@ function getData() {
       alert(error.responseJSON.message);
       location.reload();
     });
-
   $.ajax({
     url: forecastQueryURL + city + "&appid=" + APIkey + "&units=metric",
     method: "GET"
@@ -121,13 +90,11 @@ function getData() {
       let tempsDay = [];
       let humDay = [];
       let iconDay = [];
-
       let cardDate = moment()
         .utc()
         .add(response.city.timezone, "s")
         .add(i, "d")
         .format("DD/MM/YYYY");
-
       weatherArr.forEach(function(item) {
         if (item.date === cardDate) {
           tempsDay.push(item.temp);
@@ -153,4 +120,33 @@ function getData() {
   });
 }
 
-$("#searchBtn").on("click", getData);
+function getUVI(coords) {
+  let lat = coords.lat;
+  let lon = coords.lon;
+  $.ajax({
+    url: uviQueryURL + "appid=" + APIkey + "&lat=" + lat + "&lon=" + lon,
+    method: "GET"
+  }).then(function(response) {
+    let uvi = response.value;
+    let color = "";
+    switch (true) {
+      case uvi <= 3:
+        color = "green";
+        break;
+      case uvi > 3 && uvi <= 6:
+        color = "yellow";
+        break;
+      case uvi > 6 && uvi <= 8:
+        color = " orange";
+        break;
+      case uvi > 8 && uvi <= 11:
+        color = "red";
+        break;
+      case uvi > 11:
+        color = "violet";
+        break;
+    }
+    $("#uvi").text(" " + uvi);
+    $("#uvi").css("background-color", color);
+  });
+}
