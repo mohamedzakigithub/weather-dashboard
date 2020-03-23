@@ -1,3 +1,8 @@
+html,
+body,
+.col-md-3 {
+  background-color: rgb(116, 160, 231);
+}
 .forecast {
   width: 10rem;
   height: 15rem;
